@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: scrubpilot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: SCRUBPILOT_LLM_BASE_URL
+        sync: false
+      - key: SCRUBPILOT_LLM_API_KEY
+        sync: false
+      - key: SCRUBPILOT_LLM_MODEL
+        sync: false
