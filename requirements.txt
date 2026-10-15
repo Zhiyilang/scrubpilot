@@ -1,0 +1,3 @@
+# The agent engine is pure Python standard library (zero deps).
+# gradio is only needed for the web app / Render deployment.
+gradio>=6.0
