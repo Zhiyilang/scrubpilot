@@ -15,6 +15,29 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+
+def runpy(args, **kw):
+    """Run a child interpreter over a deterministic UTF-8 pipe.
+
+    Without this, the suite crashes on a cp936 Windows locale: the child
+    emits UTF-8 bytes while the parent's reader thread decodes with the
+    locale codec, the reader dies with UnicodeDecodeError, and stdout
+    silently becomes None -- surfacing later as a confusing TypeError.
+    """
+    import os
+    env = dict(os.environ)
+    env["PYTHONUTF8"] = "1"
+    env["PYTHONIOENCODING"] = "utf-8"
+    kw.setdefault("capture_output", True)
+    kw.setdefault("text", True)
+    kw.setdefault("encoding", "utf-8")
+    kw.setdefault("errors", "replace")
+    kw.setdefault("timeout", 180)
+    kw.setdefault("cwd", ROOT)
+    kw.setdefault("env", env)
+    return subprocess.run([sys.executable] + list(args), **kw)
+
+
 sys.path.insert(0, str(ROOT))
 
 from scrubpilot.agent import make_agent, make_verifier, scrub
@@ -332,8 +355,7 @@ check("json receipt round-trips", json.loads(receipts.receipt_json(receipt))["to
 
 # ------------------------------------------------------------------- H. CLI
 section("H. CLI")
-cli = subprocess.run(
-    [sys.executable, "-m", "scrubpilot", "scrub", "examples/messy_orders.csv", "--json"],
+cli = runpy(["-m", "scrubpilot", "scrub", "examples/messy_orders.csv", "--json"],
     capture_output=True, text=True, timeout=120, cwd=str(ROOT),
 )
 check("cli scrub exits 0", cli.returncode == 0, cli.stderr[-200:])
@@ -345,8 +367,7 @@ except Exception as exc:  # noqa: BLE001
     print("   ", exc)
 check("cli --json prints the receipt", ok)
 
-demo = subprocess.run(
-    [sys.executable, "-m", "scrubpilot", "demo"],
+demo = runpy(["-m", "scrubpilot", "demo"],
     capture_output=True, text=True, timeout=120, cwd=str(ROOT),
 )
 check("cli demo exits 0", demo.returncode == 0, demo.stderr[-200:])
