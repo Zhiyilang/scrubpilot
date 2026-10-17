@@ -2,7 +2,7 @@ Every agent framework I tried was a black box you prompt and hope. So I built on
 
 [ScrubPilot](https://github.com/Zhiyilang/scrubpilot) cleans messy CSVs. Not glamorous. That's the point: messy CSVs are the thing that actually eats an afternoon in every job I've had.
 
-<!-- THEME: Week 3 theme tie-in — the publish automation replaces this comment with 2-3 sentences tying ScrubPilot to the revealed Week 3 theme (a scored criterion). If publishing manually after launch, write the tie-in here yourself. -->
+Week 3's theme is building with open-weight models and open-source AI tools, and ScrubPilot is my answer to what that means when the "AI" part is optional: the whole agent is pure Python standard library, the default brain runs with no model at all, and when you do want a model it can be any open-weight one you're already running through Ollama, llama.cpp, or vLLM. Open weights at the proposer layer, open code at the decision layer, nothing hosted in between.
 
 You hand it a file with mixed date formats, `"$1,234.50"` amounts, `(89.00)` for refunds, duplicate rows, blank rows, headers like `Customer Name` and ` Item Qty `, and a column that is entirely empty. It runs a six-stage loop and hands back a clean file plus a receipt.
 
