@@ -1,4 +1,5 @@
-Every agent framework I tried was a black box you prompt and hope. So I built one where the entire decision layer is about 80 lines you can audit in one sitting — and the model is forbidden from touching the data.
+<!-- PUBLISH: title="I built an agent framework where the decision layer is 50 lines you can audit" tags="devchallenge,hf26challenge,ai,python,opensource" -->
+Every agent framework I tried was a black box you prompt and hope. So I built one where the entire decision layer is about 50 lines you can audit in one sitting — and the model is forbidden from touching the data.
 
 [ScrubPilot](https://github.com/Zhiyilang/scrubpilot) cleans messy CSVs. Not glamorous. That's the point: messy CSVs are the thing that actually eats an afternoon in every job I've had.
 
@@ -53,7 +54,7 @@ order_date,customer_name,item_qty,total_amount
 
 The interesting claim in this project is not "an AI cleaned my spreadsheet." It's that **you can audit it**.
 
-The decision layer — the part that decides what to do next — is about 80 lines in [`scrubpilot/brains.py`](https://github.com/Zhiyilang/scrubpilot/blob/main/scrubpilot/brains.py). The loop is 150 lines in `harness.py`. The tools are plain functions in `tools_csv.py`. No framework, no orchestration library, no hidden planner. If you can read this post you can read the agent. Try doing that with a hosted agent product.
+The decision layer — the part that decides what to do next — is about 50 lines in [`scrubpilot/brains.py`](https://github.com/Zhiyilang/scrubpilot/blob/main/scrubpilot/brains.py) (the `OfflineBrain` proposer plus its justification check). The loop is 110 lines in `harness.py`. The tools are plain functions in `tools_csv.py`. No framework, no orchestration library, no hidden planner. If you can read this post you can read the agent. Try doing that with a hosted agent product.
 
 Three concrete things that only worked because everything is open and local:
 
